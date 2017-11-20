@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
                         if (endY - startY < 0 && abs(endX - startX) < abs(endY - startY))
                             orientation="Top";
 
-                        addToRandomPosition();
+                        //addToRandomPosition();
+                        moveValues();
                         setValuesToBoard();
                         break;
                 }
@@ -76,14 +77,64 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public int getColumn(int i){
+                if((i+4)%4==0)
+                    return 1;
+                if((i+3)%4==0)
+                    return 2;
+                if((i+2)%4==0)
+                    return 3;
+                if((i+1)%4==0)
+                    return 4;
+                return 0;
+    }
+
+    public void moveValues(){
+        getEmptyBoxes();
+        switch (orientation) {
+            case "Right":
+                for(int i = 0; i<allBoard; i++)
+                    if(!emptyBoxes[i]){
+                        int ii = leastRight(getColumn(i),i);
+                        boardValues[ii]=boardValues[i];
+                        boardValues[i] = "";
+                        getEmptyBoxes();
+                        break;
+                    }
+            break;
+        }
+    }
+
+    public int leastRight(int i, int a){
+        int least = a;
+        switch (i){
+            case 1:
+                if(emptyBoxes[a+3]) {
+                    least = a + 3;
+                    break;
+                }
+                if(emptyBoxes[a+2]) {
+                    least = a + 2;
+                    break;
+                }
+                if(emptyBoxes[a+1]) {
+                    least = a + 1;
+                    break;
+                }
+        }
+        return least;
+    }
+
     public void initBoard(){
         if(!gameStarted){
             getRandomPosition();
+            randPos = 12;
             boardValues[randPos]=startingValue;
-            getRandomPosition();
-            boardValues[randPos]=startingValue;
+            //getRandomPosition();
+            //boardValues[randPos]=startingValue;
             gameStarted = true;
         }
+        setValuesToBoard();
     }
 
     public void addToRandomPosition(){
@@ -141,20 +192,16 @@ public class MainActivity extends AppCompatActivity {
     private void setValuesToBoard(){
         for(int i = 0; i<allBoard; i++)
             boardHolder[i].setText(boardValues[i]);
-        getEmptyBoxes();
-        if(gameOver())
-            Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
     }
 
     private void initView() {
         main_view = findViewById(R.id.main_view);
         boardValues = getResources().getStringArray(R.array.board);
         boardIDs = new int[]{R.id.board_1,R.id.board_2,R.id.board_3,R.id.board_4,R.id.board_5,
-                R.id.board_6,R.id.board_7,R.id.board_8,R.id.board_9,R.id.board_10,R.id.board_12,
-                R.id.board_11,R.id.board_13,R.id.board_14,R.id.board_15,R.id.board_16};
+                R.id.board_6,R.id.board_7,R.id.board_8,R.id.board_9,R.id.board_10,R.id.board_11,
+                R.id.board_12,R.id.board_13,R.id.board_14,R.id.board_15,R.id.board_16};
         for(int i = 0; i<allBoard; i++)
             boardHolder[i] = findViewById(boardIDs[i]);
         initBoard();
-        setValuesToBoard();
     }
 }
