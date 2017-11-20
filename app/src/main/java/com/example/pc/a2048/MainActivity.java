@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView[] boardHolder = new TextView[allBoard];
     private String[] boardValues;
     private int[] boardIDs;
+    private int randPos;
+    private boolean gameStarted = false;
+    private boolean[] emptyBoxes;
+    private String startingValue = "2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
-
-        setValuesToBoard();
 
         getTouchOrientation();
 
@@ -63,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
                         if (endY - startY < 0 && abs(endX - startX) < abs(endY - startY))
                             orientation="Top";
 
-                        Toast.makeText(MainActivity.this, orientation, Toast.LENGTH_SHORT).show();
-
+                        addToRandomPosition();
+                        setValuesToBoard();
                         break;
                 }
                 return true;
@@ -72,9 +76,74 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void initBoard(){
+        if(!gameStarted){
+            getRandomPosition();
+            boardValues[randPos]=startingValue;
+            getRandomPosition();
+            boardValues[randPos]=startingValue;
+            gameStarted = true;
+        }
+    }
+
+    public void addToRandomPosition(){
+        getRandomPosition();
+        boardValues[randPos]=startingValue;
+    }
+
+    public void getEmptyBoxes(){
+        emptyBoxes = new boolean [allBoard];
+        for(int i = 0; i<allBoard; i++)
+            if(boardValues[i].isEmpty())
+                emptyBoxes[i] = true;
+    }
+
+    public void getRandomPosition(){
+        getEmptyBoxes();
+        if(gameOver())
+            Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
+        else if (emptyElements()==1 && lastElement()!=99)
+            randPos = lastElement();
+        else {
+            int rand = ThreadLocalRandom.current().nextInt(0, 15);
+            if (emptyBoxes[rand])
+                randPos = rand;
+            else
+                getRandomPosition();
+        }
+    }
+
+    public int emptyElements(){
+        int x = 0;
+        for(int i = 0; i<allBoard; i++)
+            if(emptyBoxes[i])
+                x++;
+        return x;
+    }
+
+    public int lastElement(){
+        for(int i = 0; i<allBoard; i++)
+            if(emptyBoxes[i])
+                return i;
+        return 99;
+    }
+
+    public Boolean gameOver(){
+        int x = 0;
+        for(int i = 0; i<allBoard; i++)
+            if(emptyBoxes[i])
+                x++;
+        if(x==0)
+            return true;
+        return false;
+    }
+
     private void setValuesToBoard(){
         for(int i = 0; i<allBoard; i++)
             boardHolder[i].setText(boardValues[i]);
+        getEmptyBoxes();
+        if(gameOver())
+            Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
     }
 
     private void initView() {
@@ -85,5 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.board_11,R.id.board_13,R.id.board_14,R.id.board_15,R.id.board_16};
         for(int i = 0; i<allBoard; i++)
             boardHolder[i] = findViewById(boardIDs[i]);
+        initBoard();
+        setValuesToBoard();
     }
 }
