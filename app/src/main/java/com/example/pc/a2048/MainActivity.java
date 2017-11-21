@@ -92,6 +92,17 @@ public class MainActivity extends AppCompatActivity {
                     return 4;
                 return 0;
     }
+    public int getRow(int i){
+                if(i>-1 && i<4)
+                    return 1;
+                if(i>3 && i<8)
+                    return 2;
+                if(i>7 && i<12)
+                    return 3;
+                if(i>11 && i<16)
+                    return 4;
+                return 0;
+    }
 
     public void moveValues(){
         getEmptyBoxes();
@@ -129,7 +140,108 @@ public class MainActivity extends AppCompatActivity {
                         getEmptyBoxes();
                 }
                 break;
+            case "Top":
+                for(int i = 0; i<allBoard; i++)
+                    if (!boardValues[i].isEmpty()) {
+                        int ii = leastUp(getRow(i), i);
+                        if (boardValues[i].equals(boardValues[ii]) && i!=ii){
+                            int x = Integer.parseInt(boardValues[i])*2;
+                            gameScore += x;
+                            middle = Integer.toString(x);
+                        }
+                        else
+                            middle = boardValues[i];
+                        boardValues[i] = "";
+                        boardValues[ii] = middle;
+                        getEmptyBoxes();
+                    }
+
+                break;
+            case "Bottom":
+                for(int i = 0; i<allBoard; i++)
+                    if (!boardValues[i].isEmpty()) {
+                        int ii = leastDown(getRow(i), i);
+                        if (boardValues[i].equals(boardValues[ii]) && i!=ii){
+                            int x = Integer.parseInt(boardValues[i])*2;
+                            gameScore += x;
+                            middle = Integer.toString(x);
+                        }
+                        else
+                            middle = boardValues[i];
+                        boardValues[i] = "";
+                        boardValues[ii] = middle;
+                        getEmptyBoxes();
+                    }
+
+                break;
         }
+    }
+    public int leastUp(int i, int a){
+        int least = a;
+        switch (i){
+            case 4:
+                if((boardValues[a-12].equals(boardValues[a]) && emptyBoxes[a-4] && emptyBoxes[a-8]) || emptyBoxes[a-12]) {
+                    least = a - 12;
+                    break;
+                }
+                if((boardValues[a-8].equals(boardValues[a]) && emptyBoxes[a-4]) || emptyBoxes[a-8]) {
+                    least = a - 8;
+                    break;
+                }
+                if(boardValues[a-4].equals(boardValues[a]) || emptyBoxes[a-4]) {
+                    least = a - 4;
+                    break;
+                }
+            case 3:
+                if((boardValues[a-8].equals(boardValues[a]) && emptyBoxes[a-4]) || emptyBoxes[a-8]) {
+                    least = a - 8;
+                    break;
+                }
+                if(boardValues[a-4].equals(boardValues[a]) || emptyBoxes[a-4]) {
+                    least = a - 4;
+                    break;
+                }
+            case 2:
+                if(boardValues[a-4].equals(boardValues[a]) || emptyBoxes[a-4]) {
+                    least = a - 4;
+                    break;
+                }
+        }
+        return least;
+    }
+
+    public int leastDown(int i, int a){
+        int least = a;
+        switch (i){
+            case 1:
+                if((boardValues[a+12].equals(boardValues[a]) && emptyBoxes[a+4] && emptyBoxes[a+8]) || emptyBoxes[a+12]) {
+                    least = a + 12;
+                    break;
+                }
+                if((boardValues[a+8].equals(boardValues[a]) && emptyBoxes[a+4]) || emptyBoxes[a+8]) {
+                    least = a + 8;
+                    break;
+                }
+                if(boardValues[a+4].equals(boardValues[a]) || emptyBoxes[a+4]) {
+                    least = a + 4;
+                    break;
+                }
+            case 2:
+                if((boardValues[a+8].equals(boardValues[a]) && emptyBoxes[a+4]) || emptyBoxes[a+8]) {
+                    least = a + 8;
+                    break;
+                }
+                if(boardValues[a+4].equals(boardValues[a]) || emptyBoxes[a+4]) {
+                    least = a + 4;
+                    break;
+                }
+            case 3:
+                if(boardValues[a+4].equals(boardValues[a]) || emptyBoxes[a+4]) {
+                    least = a + 4;
+                    break;
+                }
+        }
+        return least;
     }
 
     public int leastLeft(int i, int a){
