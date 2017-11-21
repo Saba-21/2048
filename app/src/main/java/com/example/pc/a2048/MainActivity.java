@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,11 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView[] boardHolder = new TextView[allBoard];
     private String[] boardValues;
     private int[] boardIDs;
-    private int randPos;
+    private int randPos = 99;
     private boolean gameStarted = false;
     private boolean[] emptyBoxes;
     private String startingValue = "2";
     private int gameScore;
+    private int[] changedBoxes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getSupportActionBar().hide();
-
         setContentView(R.layout.activity_main);
 
         initView();
+        if(getIntent().getStringExtra("record")!=null)
+            record.setText(getIntent().getStringExtra("record"));
 
         getTouchOrientation();
 
@@ -119,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             int x = Integer.parseInt(boardValues[i])*2;
                             gameScore += x;
                             middle = Integer.toString(x);
+                            changedBoxes[ii]=ii;
                         }
                         else
                             middle = boardValues[i];
@@ -135,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                             int x = Integer.parseInt(boardValues[i])*2;
                             gameScore += x;
                             middle = Integer.toString(x);
+                            changedBoxes[ii]=ii;
                         }
                         else
                             middle = boardValues[i];
@@ -151,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                             int x = Integer.parseInt(boardValues[i])*2;
                             gameScore += x;
                             middle = Integer.toString(x);
+                            changedBoxes[ii]=ii;
                         }
                         else
                             middle = boardValues[i];
@@ -168,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                             int x = Integer.parseInt(boardValues[i])*2;
                             gameScore += x;
                             middle = Integer.toString(x);
+                            changedBoxes[ii]=ii;
                         }
                         else
                             middle = boardValues[i];
@@ -385,6 +393,17 @@ public class MainActivity extends AppCompatActivity {
         score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
             boardHolder[i].setText(boardValues[i]);
+            if(i==changedBoxes[i] && !boardValues[i].isEmpty()) {
+                Animation scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_in);
+                boardHolder[i].startAnimation(scaleAnimation);
+                changedBoxes[i]=99;
+            }
+            if(i==randPos){
+                Animation scaleZeroAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_from_zero);
+                boardHolder[i].startAnimation(scaleZeroAnimation);
+                randPos=99;
+            }
+
             switch (boardValues[i]) {
                 case "8":
                     boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_eight));
@@ -436,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        changedBoxes = new int[]{99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
         restart = findViewById(R.id.restart);
         score = findViewById(R.id.score);
         record = findViewById(R.id.record);
