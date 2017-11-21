@@ -393,6 +393,7 @@ public class MainActivity extends AppCompatActivity {
         score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
             boardHolder[i].setText(boardValues[i]);
+
             if(i==changedBoxes[i] && !boardValues[i].isEmpty()) {
                 Animation scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_in);
                 boardHolder[i].startAnimation(scaleAnimation);
