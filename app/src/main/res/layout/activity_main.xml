@@ -305,6 +305,7 @@
             android:background="@drawable/main_back"
             android:layout_margin="@dimen/text_view_margin"
             android:visibility="invisible"
+            android:id="@+id/restart"
             android:onClick="restartGame"/>
     </LinearLayout>
 

@@ -436,6 +436,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        restart = findViewById(R.id.restart);
         score = findViewById(R.id.score);
         record = findViewById(R.id.record);
         main_view = findViewById(R.id.main_view);
