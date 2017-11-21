@@ -3,8 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="back_color">#BBADA0</color>
+
     <color name="front_color">#CCC0B2</color>
-    <color name="eight">#F2B179</color>
+
+    <color name="back_color">#BBADA0</color>
+    <color name="main_background">#FAF8EF</color>
+
+    <color name="empty">  #D6CDC4</color>
+    <color name="two">    #EEE4DA</color>
+    <color name="four">   #EDE0C8</color>
+    <color name="eight">  #F2B179</color>
     <color name="sixteen">#F59563</color>
 </resources>

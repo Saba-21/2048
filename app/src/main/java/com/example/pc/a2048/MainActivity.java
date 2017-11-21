@@ -1,12 +1,13 @@
 package com.example.pc.a2048;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,8 +17,9 @@ import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
 
+    private TextView score, record;
     private String orientation;
-    private RelativeLayout main_view;
+    private LinearLayout main_view;
     private float startX, endX, startY, endY;
     private final int allBoard = 16;
     private TextView[] boardHolder = new TextView[allBoard];
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean gameStarted = false;
     private boolean[] emptyBoxes;
     private String startingValue = "2";
+    private int gameScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         int ii = leastRight(getColumn(i),i);
                         if (boardValues[i].equals(boardValues[ii]) && i!=ii){
                             int x = Integer.parseInt(boardValues[i])*2;
+                            gameScore += x;
                             middle = Integer.toString(x);
                         }
                         else
@@ -115,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         int ii = leastLeft(getColumn(i), i);
                         if (boardValues[i].equals(boardValues[ii]) && i!=ii){
                             int x = Integer.parseInt(boardValues[i])*2;
+                            gameScore += x;
                             middle = Integer.toString(x);
                         }
                         else
@@ -265,26 +270,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setValuesToBoard(){
+        score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
             boardHolder[i].setText(boardValues[i]);
             switch (boardValues[i]) {
                 case "8":
                     boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_eight));
+                    boardHolder[i].setTextColor(Color.WHITE);
                     break;
                 case "16":
                     boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_sixteen));
+                    boardHolder[i].setTextColor(Color.WHITE);
                     break;
                 case "":
-                case "2":
-                case "4":
-                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_default));
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_empty));
                     break;
-
+                case "2":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_two));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "4":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_four));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
             }
         }
     }
 
     private void initView() {
+        score = findViewById(R.id.score);
+        record = findViewById(R.id.record);
         main_view = findViewById(R.id.main_view);
         boardValues = getResources().getStringArray(R.array.board);
         boardIDs = new int[]{R.id.board_1,R.id.board_2,R.id.board_3,R.id.board_4,R.id.board_5,
