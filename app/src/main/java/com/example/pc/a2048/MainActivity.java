@@ -203,14 +203,8 @@ public class MainActivity extends AppCompatActivity {
     public void initBoard(){
         if(!gameStarted){
             getRandomPosition();
-            randPos = 0;
             boardValues[randPos]=startingValue;
             getRandomPosition();
-            randPos = 3;
-            boardValues[randPos]=startingValue;
-            randPos = 2;
-            boardValues[randPos]=startingValue;
-            randPos = 1;
             boardValues[randPos]=startingValue;
             gameStarted = true;
         }
@@ -291,6 +285,26 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "4":
                     boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_four));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "32":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_32));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "64":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_64));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "128":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_128));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "256":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_256));
+                    boardHolder[i].setTextColor(score.getTextColors());
+                    break;
+                case "512":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_512));
                     boardHolder[i].setTextColor(score.getTextColors());
                     break;
             }

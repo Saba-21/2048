@@ -14,4 +14,11 @@
     <color name="four">   #EDE0C8</color>
     <color name="eight">  #F2B179</color>
     <color name="sixteen">#F59563</color>
+    <color name="color_32">#F67C5F</color>
+    <color name="color_64">#F75E3B</color>
+    <color name="color_128">#EDCF72</color>
+    <color name="color_256">#EDCC61</color>
+    <color name="color_512">#EDC850</color>
+
+
 </resources>

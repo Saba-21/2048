@@ -3,6 +3,6 @@
 <resources>
 
     <dimen name="text_view_margin">10dp</dimen>
-    <dimen name="text_view_text_size">110sp</dimen>
+    <dimen name="text_view_text_size">80sp</dimen>
 
 </resources>
