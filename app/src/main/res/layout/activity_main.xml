@@ -298,6 +298,14 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Restart"
+            android:background="@drawable/main_back"
+            android:layout_margin="@dimen/text_view_margin"
+            android:visibility="invisible"
+            android:onClick="restartGame"/>
     </LinearLayout>
 
 </LinearLayout>

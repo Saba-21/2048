@@ -1,5 +1,6 @@
 package com.example.pc.a2048;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button restart;
     private TextView score, record;
     private String orientation;
     private LinearLayout main_view;
@@ -337,8 +340,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void getRandomPosition(){
         getEmptyBoxes();
-        if(gameOver())
+        if(gameOver()) {
+            record.setText(score.getText().toString());
             Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
+            restart.setVisibility(View.VISIBLE);
+        }
         else if (emptyElements()==1 && lastElement()!=99)
             randPos = lastElement();
         else {
@@ -421,6 +427,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public void restartGame(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("record", record.getText().toString());
+        startActivity(intent);
     }
 
     private void initView() {
