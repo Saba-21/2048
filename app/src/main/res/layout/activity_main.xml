@@ -28,7 +28,7 @@
             android:gravity="center"
             android:id="@+id/board_1"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:id="@+id/board_2"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -48,7 +48,7 @@
             android:gravity="center"
             android:id="@+id/board_3"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -58,7 +58,7 @@
             android:gravity="center"
             android:id="@+id/board_4"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
     </LinearLayout>
@@ -74,7 +74,7 @@
             android:gravity="center"
             android:id="@+id/board_5"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -84,7 +84,7 @@
             android:gravity="center"
             android:id="@+id/board_6"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -94,7 +94,7 @@
             android:gravity="center"
             android:id="@+id/board_7"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -104,7 +104,7 @@
             android:gravity="center"
             android:id="@+id/board_8"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
     </LinearLayout>
@@ -120,7 +120,7 @@
             android:gravity="center"
             android:id="@+id/board_9"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -130,7 +130,7 @@
             android:gravity="center"
             android:id="@+id/board_10"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -140,7 +140,7 @@
             android:gravity="center"
             android:id="@+id/board_11"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -150,7 +150,7 @@
             android:gravity="center"
             android:id="@+id/board_12"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
     </LinearLayout>
@@ -166,7 +166,7 @@
             android:gravity="center"
             android:id="@+id/board_13"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -176,7 +176,7 @@
             android:gravity="center"
             android:id="@+id/board_14"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -186,7 +186,7 @@
             android:gravity="center"
             android:id="@+id/board_15"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
         <TextView
@@ -196,7 +196,7 @@
             android:gravity="center"
             android:id="@+id/board_16"
             android:textSize="@dimen/text_view_text_size"
-            android:background="@drawable/corner_shape"
+            android:background="@drawable/back_default"
             android:layout_margin="@dimen/text_view_margin"
             />
     </LinearLayout>

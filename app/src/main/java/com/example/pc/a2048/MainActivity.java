@@ -1,6 +1,7 @@
 package com.example.pc.a2048;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
                         if (endY - startY < 0 && abs(endX - startX) < abs(endY - startY))
                             orientation="Top";
 
-                        //addToRandomPosition();
                         moveValues();
+                        addToRandomPosition();
                         setValuesToBoard();
                         break;
                 }
@@ -91,33 +92,102 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveValues(){
         getEmptyBoxes();
+        String middle;
         switch (orientation) {
             case "Right":
                 for(int i = 0; i<allBoard; i++)
-                    if(!emptyBoxes[i]){
+                    if(!boardValues[i].isEmpty()){
                         int ii = leastRight(getColumn(i),i);
-                        boardValues[ii]=boardValues[i];
+                        if (boardValues[i].equals(boardValues[ii]) && i!=ii){
+                            int x = Integer.parseInt(boardValues[i])*2;
+                            middle = Integer.toString(x);
+                        }
+                        else
+                            middle = boardValues[i];
                         boardValues[i] = "";
+                        boardValues[ii]= middle;
                         getEmptyBoxes();
-                        break;
                     }
-            break;
+                break;
+            case "Left":
+                for(int i = 0; i<allBoard; i++)
+                    if (!boardValues[i].isEmpty()) {
+                        int ii = leastLeft(getColumn(i), i);
+                        if (boardValues[i].equals(boardValues[ii]) && i!=ii){
+                            int x = Integer.parseInt(boardValues[i])*2;
+                            middle = Integer.toString(x);
+                        }
+                        else
+                            middle = boardValues[i];
+                        boardValues[i] = "";
+                        boardValues[ii] = middle;
+                        getEmptyBoxes();
+                }
+                break;
         }
+    }
+
+    public int leastLeft(int i, int a){
+        int least = a;
+        switch (i){
+            case 4:
+                if((boardValues[a-3].equals(boardValues[a]) && emptyBoxes[a-2] && emptyBoxes[a-1]) || emptyBoxes[a-3]) {
+                    least = a - 3;
+                    break;
+                }
+                if((boardValues[a-2].equals(boardValues[a]) && emptyBoxes[a-1]) || emptyBoxes[a-2]) {
+                    least = a - 2;
+                    break;
+                }
+                if(boardValues[a-1].equals(boardValues[a]) || emptyBoxes[a-1]) {
+                    least = a - 1;
+                    break;
+                }
+            case 3:
+                if((boardValues[a-2].equals(boardValues[a]) && emptyBoxes[a-1]) || emptyBoxes[a-2]) {
+                    least = a - 2;
+                    break;
+                }
+                if(boardValues[a-1].equals(boardValues[a]) || emptyBoxes[a-1]) {
+                    least = a - 1;
+                    break;
+                }
+            case 2:
+                if(boardValues[a-1].equals(boardValues[a]) || emptyBoxes[a-1]) {
+                    least = a - 1;
+                    break;
+                }
+        }
+        return least;
     }
 
     public int leastRight(int i, int a){
         int least = a;
         switch (i){
             case 1:
-                if(emptyBoxes[a+3]) {
+                if((boardValues[a+3].equals(boardValues[a]) && emptyBoxes[a+2] && emptyBoxes[a+1]) || emptyBoxes[a+3]) {
                     least = a + 3;
                     break;
                 }
-                if(emptyBoxes[a+2]) {
+                if((boardValues[a+2].equals(boardValues[a]) && emptyBoxes[a+1]) || emptyBoxes[a+2]) {
                     least = a + 2;
                     break;
                 }
-                if(emptyBoxes[a+1]) {
+                if(boardValues[a+1].equals(boardValues[a]) || emptyBoxes[a+1]) {
+                    least = a + 1;
+                    break;
+                }
+            case 2:
+                if((boardValues[a+2].equals(boardValues[a]) && emptyBoxes[a+1]) || emptyBoxes[a+2]) {
+                    least = a + 2;
+                    break;
+                }
+                if(boardValues[a+1].equals(boardValues[a]) || emptyBoxes[a+1]) {
+                    least = a + 1;
+                    break;
+                }
+            case 3:
+                if(boardValues[a+1].equals(boardValues[a]) || emptyBoxes[a+1]) {
                     least = a + 1;
                     break;
                 }
@@ -128,10 +198,15 @@ public class MainActivity extends AppCompatActivity {
     public void initBoard(){
         if(!gameStarted){
             getRandomPosition();
-            randPos = 12;
+            randPos = 0;
             boardValues[randPos]=startingValue;
-            //getRandomPosition();
-            //boardValues[randPos]=startingValue;
+            getRandomPosition();
+            randPos = 3;
+            boardValues[randPos]=startingValue;
+            randPos = 2;
+            boardValues[randPos]=startingValue;
+            randPos = 1;
+            boardValues[randPos]=startingValue;
             gameStarted = true;
         }
         setValuesToBoard();
@@ -190,8 +265,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setValuesToBoard(){
-        for(int i = 0; i<allBoard; i++)
+        for(int i = 0; i<allBoard; i++) {
             boardHolder[i].setText(boardValues[i]);
+            switch (boardValues[i]) {
+                case "8":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_eight));
+                    break;
+                case "16":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_sixteen));
+                    break;
+                case "":
+                case "2":
+                case "4":
+                    boardHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_default));
+                    break;
+
+            }
+        }
     }
 
     private void initView() {
