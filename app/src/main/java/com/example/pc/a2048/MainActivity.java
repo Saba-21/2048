@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         String middle;
         switch (orientation) {
             case "Right":
-                for(int i = 0; i<allBoard; i++)
+                for(int i = allBoard-1; i>-1; i--)
                     if(!boardValues[i].isEmpty()){
                         int ii = leastRight(getColumn(i),i);
                         if (boardValues[i].equals(boardValues[ii]) && i!=ii){
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case "Bottom":
-                for(int i = 0; i<allBoard; i++)
+                for(int i = allBoard-1; i>-1; i--)
                     if (!boardValues[i].isEmpty()) {
                         int ii = leastDown(getRow(i), i);
                         if (boardValues[i].equals(boardValues[ii]) && i!=ii){
@@ -336,7 +336,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void addToRandomPosition(){
         getRandomPosition();
-        boardValues[randPos]=startingValue;
+        if(randPos!=99)
+            boardValues[randPos]=startingValue;
     }
 
     public void getEmptyBoxes(){
@@ -393,8 +394,8 @@ public class MainActivity extends AppCompatActivity {
         score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
             boardHolder[i].setText(boardValues[i]);
-
-            if(i==changedBoxes[i] && !boardValues[i].isEmpty()) {
+            getEmptyBoxes();
+            if(i==changedBoxes[i] && !boardValues[i].isEmpty() && !emptyBoxes[i]) {
                 Animation scaleAnimation = AnimationUtils.loadAnimation(this, R.anim.scale_in);
                 boardHolder[i].startAnimation(scaleAnimation);
                 changedBoxes[i]=99;
