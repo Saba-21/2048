@@ -1,3 +1,3 @@
 # 2048
-plain old game, lightweight and adfree,
-build from scratch, just personal challenge, nothing more))
+plain old game,
+built from scratch, just personal challenge, nothing more))
