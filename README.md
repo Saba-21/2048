@@ -1,3 +1,3 @@
 # 2048
 plain old game,
-build from scratch, just personal challenge, nothing more))
+built from scratch, just personal challenge, nothing more))
