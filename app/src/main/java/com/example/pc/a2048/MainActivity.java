@@ -1,28 +1,30 @@
 package com.example.pc.a2048;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ContentFrameLayout;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.concurrent.ThreadLocalRandom;
 import static java.lang.Math.abs;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    private Button restart;
+    private ColorStateList textColor;
     private TextView score, record;
     private String orientation;
-    private LinearLayout main_view;
+    private ContentFrameLayout main_view;
     private float startX, endX, startY, endY;
     private final int allBoard = 16;
     private TextView[] boardViewHolder;
@@ -35,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     private String startingValue = "2";
     private int gameScore;
     private int[] changedBoxes;
+    private Dialog reset;
+    private final String scoreKey = "Score", recordKey = "Record", boardKey = "Board",
+            startKey = "Start", endKey = "End", prefKey = "myPref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,42 +49,77 @@ public class MainActivity extends AppCompatActivity {
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
-        setContentView(R.layout.activity_main);
+        switch (this.getResources().getConfiguration().orientation){
+            case 1: setContentView(R.layout.activity_main);
+                break;
+            case 2: setContentView(R.layout.activity_main_land);
+                break;
+        }
 
         initView();
 
-        if(getIntent() != null)
-            record.setText(getIntent().getStringExtra("record"));
+        initBoard();
 
         gamePlay();
-
     }
 
-    private void gamePlay(){
-        main_view.setOnTouchListener(new View.OnTouchListener() {
+    private void gamePlay() {
+        main_view.setOnTouchListener(this);
+    }
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
+    @Override
+    public boolean onTouch (View v, MotionEvent event){
+        switch (event.getAction()) {
 
-                    case MotionEvent.ACTION_DOWN:
-                        startX = event.getRawX() - v.getX();
-                        startY = event.getRawY() - v.getY();
-                        break;
+            case MotionEvent.ACTION_DOWN:
+                startX = event.getRawX() - v.getX();
+                startY = event.getRawY() - v.getY();
+                break;
 
-                    case MotionEvent.ACTION_UP:
-                        endX = event.getRawX() - v.getX();
-                        endY = event.getRawY() - v.getY();
+            case MotionEvent.ACTION_UP:
+                endX = event.getRawX() - v.getX();
+                endY = event.getRawY() - v.getY();
 
-                        getOrientation();
-                        moveValues();
-                        addToRandomPosition();
-                        setValuesToBoard();
-                        break;
+                if (gameStarted && !gameOver) {
+                    getOrientation();
+                    moveValues();
+                    addToRandomPosition();
                 }
-                return true;
-            }
-        });
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putStringArray(boardKey, boardValues);
+        outState.putString(scoreKey, score.getText().toString());
+        outState.putString(recordKey, record.getText().toString());
+        outState.putBoolean(startKey, gameStarted);
+        outState.putBoolean(endKey, gameOver);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        score.setText(savedInstanceState.getString(scoreKey));
+        record.setText(savedInstanceState.getString(recordKey));
+        boardValues = savedInstanceState.getStringArray(boardKey);
+        gameStarted = savedInstanceState.getBoolean(startKey);
+        gameOver = savedInstanceState.getBoolean(endKey);
+        setValuesToBoard();
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void saveToSharedPreferences(){
+        SharedPreferences.Editor editor = getSharedPreferences(prefKey, MODE_PRIVATE).edit();
+        editor.putString(recordKey, record.getText().toString());
+        editor.apply();
+    }
+
+    public String getValuesFromSharedPreferences(){
+        SharedPreferences prefs = getSharedPreferences(prefKey, MODE_PRIVATE);
+        return prefs.getString(recordKey, Integer.toString(0));
     }
 
     public void getOrientation(){
@@ -338,36 +378,39 @@ public class MainActivity extends AppCompatActivity {
             gameStarted = true;
         }
         setValuesToBoard();
+        record.setText(getValuesFromSharedPreferences());
     }
 
     public void addToRandomPosition(){
         getRandomPosition();
         if(randPos!=outOfBoard)
             boardValues[randPos]=startingValue;
+        setValuesToBoard();
     }
 
     public void getEmptyBoxes(){
         for(int i = 0; i<allBoard; i++)
-            if(boardValues[i].isEmpty())
-                emptyBoxes[i] = true;
+                emptyBoxes[i] = boardValues[i].equals("");
     }
 
     public void getRandomPosition(){
         getEmptyBoxes();
         if(emptyBoxesOver() && !gameOver) {
             record.setText(score.getText().toString());
-            Toast.makeText(this, "Game Over!", Toast.LENGTH_SHORT).show();
-            restart.setVisibility(View.VISIBLE);
             gameOver = true;
+            reset.show();
+            if (Integer.parseInt(getValuesFromSharedPreferences())<Integer.parseInt(record.getText().toString()))
+                saveToSharedPreferences();
         }
-        else if (emptyElements()==1 && lastElement()!=outOfBoard)
-            randPos = lastElement();
-        else {
-            int rand = ThreadLocalRandom.current().nextInt(0, 15);
-            if (emptyBoxes[rand])
-                randPos = rand;
-            else
-                getRandomPosition();
+        else
+            if (emptyElements()==1 && lastElement()!=outOfBoard)
+                randPos = lastElement();
+            else {
+                int rand = ThreadLocalRandom.current().nextInt(0, 15);
+                if (emptyBoxes[rand])
+                    randPos = rand;
+                else
+                    getRandomPosition();
         }
     }
 
@@ -395,7 +438,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setValuesToBoard(){
-        score.setText(Integer.toString(gameScore));
+        if (gameScore!=0)
+            score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
             boardViewHolder[i].setText(boardValues[i]);
             getEmptyBoxes();
@@ -415,11 +459,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "2":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_two));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "4":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_four));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "8":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_eight));
@@ -431,43 +475,41 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "32":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_32));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "64":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_64));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "128":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_128));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "256":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_256));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
                 case "512":
                     boardViewHolder[i].setBackground(ContextCompat.getDrawable(this, R.drawable.back_512));
-                    boardViewHolder[i].setTextColor(score.getTextColors());
+                    boardViewHolder[i].setTextColor(textColor);
                     break;
             }
         }
     }
 
-    public void restartGame(View view){
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("record", record.getText().toString());
-        startActivity(intent);
-    }
-
     private void initView() {
-        emptyBoxes = new boolean [allBoard];
+        reset = new Dialog(this);
+        reset.setContentView(R.layout.reset_dialog);
+        Button restart = reset.findViewById(R.id.reset);
+        emptyBoxes = new boolean[allBoard];
         boardViewHolder = new TextView[allBoard];
         changedBoxes = new int[allBoard];
         boardValues = getResources().getStringArray(R.array.board);
-        restart = findViewById(R.id.restart);
         score = findViewById(R.id.score);
         record = findViewById(R.id.record);
-        main_view = findViewById(R.id.main_view);
+        textColor = score.getTextColors();
+        main_view = findViewById(android.R.id.content);
+        restart.setTextColor(textColor);
         int[] boardIDs = new int[]{R.id.board_1,R.id.board_2,R.id.board_3,R.id.board_4,R.id.board_5,
                 R.id.board_6,R.id.board_7,R.id.board_8,R.id.board_9,R.id.board_10,R.id.board_11,
                 R.id.board_12,R.id.board_13,R.id.board_14,R.id.board_15,R.id.board_16};
@@ -475,6 +517,14 @@ public class MainActivity extends AppCompatActivity {
             boardViewHolder[i] = findViewById(boardIDs[i]);
             changedBoxes[i] = outOfBoard;
         }
-        initBoard();
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                intent.putExtra(recordKey, record.getText().toString());
+                startActivity(intent);
+                reset.dismiss();
+            }
+        });
     }
 }
