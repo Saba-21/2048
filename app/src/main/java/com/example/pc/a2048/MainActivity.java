@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private String startingValue = "2";
     private int gameScore;
     private int[] changedBoxes;
-    private Dialog reset;
+    private Dialog resetDialog;
     private final String scoreKey = "Score", recordKey = "Record", boardKey = "Board",
             startKey = "Start", endKey = "End", prefKey = "myPref";
 
@@ -55,11 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case 2: setContentView(R.layout.activity_main_land);
                 break;
         }
-
         initView();
-
         initBoard();
-
         gamePlay();
     }
 
@@ -102,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        score.setText(savedInstanceState.getString(scoreKey));
-        record.setText(savedInstanceState.getString(recordKey));
+        gameScore = Integer.parseInt(savedInstanceState.getString(scoreKey));
         boardValues = savedInstanceState.getStringArray(boardKey);
         gameStarted = savedInstanceState.getBoolean(startKey);
         gameOver = savedInstanceState.getBoolean(endKey);
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     public void saveToSharedPreferences(){
         SharedPreferences.Editor editor = getSharedPreferences(prefKey, MODE_PRIVATE).edit();
-        editor.putString(recordKey, record.getText().toString());
+        editor.putString(recordKey, score.getText().toString());
         editor.apply();
     }
 
@@ -370,6 +366,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     public void initBoard(){
+        record.setText(getValuesFromSharedPreferences());
+        score.setText(Integer.toString(gameScore));
         if(!gameStarted){
             getRandomPosition();
             boardValues[randPos]=startingValue;
@@ -378,7 +376,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             gameStarted = true;
         }
         setValuesToBoard();
-        record.setText(getValuesFromSharedPreferences());
     }
 
     public void addToRandomPosition(){
@@ -396,11 +393,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     public void getRandomPosition(){
         getEmptyBoxes();
         if(emptyBoxesOver() && !gameOver) {
-            record.setText(score.getText().toString());
             gameOver = true;
-            reset.show();
-            if (Integer.parseInt(getValuesFromSharedPreferences())<Integer.parseInt(record.getText().toString()))
+            resetDialog.show();
+            if (Integer.parseInt(getValuesFromSharedPreferences())<gameScore) {
+                record.setText(Integer.toString(gameScore));
                 saveToSharedPreferences();
+            }
         }
         else
             if (emptyElements()==1 && lastElement()!=outOfBoard)
@@ -438,6 +436,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void setValuesToBoard(){
+        if (gameOver)
+            resetDialog.show();
         if (gameScore!=0)
             score.setText(Integer.toString(gameScore));
         for(int i = 0; i<allBoard; i++) {
@@ -498,9 +498,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void initView() {
-        reset = new Dialog(this);
-        reset.setContentView(R.layout.reset_dialog);
-        Button restart = reset.findViewById(R.id.reset);
+        resetDialog = new Dialog(this);
+        resetDialog.setContentView(R.layout.reset_dialog);
+        resetDialog.setCancelable(false);
+        resetDialog.setCanceledOnTouchOutside(false);
+        Button resetButton = resetDialog.findViewById(R.id.reset);
         emptyBoxes = new boolean[allBoard];
         boardViewHolder = new TextView[allBoard];
         changedBoxes = new int[allBoard];
@@ -509,7 +511,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         record = findViewById(R.id.record);
         textColor = score.getTextColors();
         main_view = findViewById(android.R.id.content);
-        restart.setTextColor(textColor);
+        resetButton.setTextColor(textColor);
         int[] boardIDs = new int[]{R.id.board_1,R.id.board_2,R.id.board_3,R.id.board_4,R.id.board_5,
                 R.id.board_6,R.id.board_7,R.id.board_8,R.id.board_9,R.id.board_10,R.id.board_11,
                 R.id.board_12,R.id.board_13,R.id.board_14,R.id.board_15,R.id.board_16};
@@ -517,13 +519,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             boardViewHolder[i] = findViewById(boardIDs[i]);
             changedBoxes[i] = outOfBoard;
         }
-        restart.setOnClickListener(new View.OnClickListener() {
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                intent.putExtra(recordKey, record.getText().toString());
-                startActivity(intent);
-                reset.dismiss();
+                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                resetDialog.dismiss();
             }
         });
     }
