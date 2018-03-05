@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:text="2048 :P"
             android:textStyle="bold"
-            android:textSize="40sp"
+            android:textSize="@dimen/head_text_view_size"
             android:gravity="center_vertical"
             android:background="@drawable/main_back"/>
         </LinearLayout>
@@ -45,10 +45,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Score:"
+                android:text="@string/score"
                 android:padding="3dp"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="@dimen/head_text_view_size"
                 android:gravity="center"
                 />
             <TextView
@@ -59,7 +59,7 @@
                 android:text="0"
                 android:id="@+id/score"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="@dimen/head_text_view_size"
                 android:gravity="center"
                 />
         </LinearLayout>
@@ -76,10 +76,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="Record:"
+                android:text="@string/record"
                 android:padding="3dp"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="@dimen/head_text_view_size"
                 android:gravity="center_vertical"
                 />
             <TextView
@@ -89,7 +89,7 @@
                 android:id="@+id/record"
                 android:padding="5dp"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="@dimen/head_text_view_size"
                 android:gravity="center_vertical"
                 />
         </LinearLayout>
@@ -297,15 +297,6 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Restart"
-            android:background="@drawable/main_back"
-            android:layout_margin="@dimen/text_view_margin"
-            android:visibility="invisible"
-            android:id="@+id/restart"
-            android:onClick="restartGame"/>
     </LinearLayout>
 
 </LinearLayout>

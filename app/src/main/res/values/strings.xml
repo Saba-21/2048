@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">2048</string>
+    <string name="score">Score:</string>
+    <string name="record">Best:</string>
+    <string name="game_over">Game Over!</string>
+    <string name="restart_game">Restart Game</string>
 
     <string-array name="board">
         <item></item>

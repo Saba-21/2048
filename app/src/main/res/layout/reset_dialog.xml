@@ -10,14 +10,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Game Over!"
+        android:text="@string/game_over"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restart Game"
+        android:text="@string/restart_game"
         android:padding="@dimen/text_view_margin"
         android:layout_marginTop="@dimen/text_view_margin"
         android:layout_gravity="center_horizontal"

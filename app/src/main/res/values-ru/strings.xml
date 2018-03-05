@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="record">Лучший:</string>
+    <string name="score">Гол:</string>
+    <string name="game_over">игра закончена!</string>
+    <string name="restart_game">Перезапустить игру</string>
+</resources>

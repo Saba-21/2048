@@ -49,12 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if(getSupportActionBar() != null)
             getSupportActionBar().hide();
 
-        switch (this.getResources().getConfiguration().orientation){
-            case 1: setContentView(R.layout.activity_main);
-                break;
-            case 2: setContentView(R.layout.activity_main_land);
-                break;
-        }
+        setContentView(R.layout.activity_main);
+
         initView();
         initBoard();
         gamePlay();
